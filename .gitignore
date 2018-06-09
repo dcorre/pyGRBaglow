@@ -100,3 +100,15 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Exclude all temporary files
+*~
+*.swp
+*.swo
+
+#Exclude zip file
+*.zip
+
+# Exclude backup files 
+*.bk
+
