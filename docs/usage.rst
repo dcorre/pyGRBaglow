@@ -2,6 +2,5 @@
 Usage
 =====
 
-To use pyGRBaglow in a project::
+To do. In the meantime you have a look to the jupyter notebooks on the github.
 
-    import pyGRBaglow
