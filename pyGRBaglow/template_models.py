@@ -5,7 +5,7 @@
 import numpy as np
 from collections import OrderedDict
 from astropy.cosmology import Planck15 as cosmo
-from . import constants as cc
+from pyGRBaglow import constants as cc
 import gc
 import sys
 

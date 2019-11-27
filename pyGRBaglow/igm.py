@@ -4,7 +4,7 @@
 """
 
 #######################################
-from . import constants as cc
+from pyGRBaglow import constants as cc
 import numpy as np
 from scipy.misc import factorial
 

@@ -1,4 +1,4 @@
-from . import constants as cc
+from pyGRBaglow import constants as cc
 import numpy as np
 
 class reddening(object):
