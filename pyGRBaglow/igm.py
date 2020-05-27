@@ -6,7 +6,7 @@
 #######################################
 from pyGRBaglow import constants as cc
 import numpy as np
-from scipy.misc import factorial
+from scipy.special import factorial
 
 def meiksin(wavelength, redshift,lylim=True,lls_fact=False,Xcut=False,Xlim=10):
     """Intergalactic transmission (Meiksin, 2006)
