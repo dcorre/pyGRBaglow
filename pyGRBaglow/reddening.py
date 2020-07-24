@@ -194,7 +194,6 @@ class reddening(object):
            sum6=a_6/( (wvl/wvl_6)**n_6 + (wvl_6/wvl)**n_6 + b_6 )
 
        #Need to check whether extrapolation is needed outside the range defined in Pei92
-
        Alambda_over_Ab= (1/Rv+1) * (sum1+sum2+sum3+sum4+sum5+sum6)
  
        #Applied a cut for wavelength below 700 angstrom
