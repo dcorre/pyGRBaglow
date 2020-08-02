@@ -203,5 +203,3 @@ def test_dla(z, NHI):
         label2 = '1e20'
     expected_trans = np.genfromtxt('tests/data/test_dla_%s_%s.dat' % (label, label2))
     npt.assert_allclose(expected_trans, trans)
-
-
