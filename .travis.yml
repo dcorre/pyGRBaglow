@@ -1,29 +1,36 @@
+---
 # Config file for automatic testing at travis-ci.org
 
-language: python
-python:
-  - 3.6
-  - 3.5
-  - 3.4
-  - 2.7
+language: minimal
 
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: pip install -U tox-travis
+env:
+# - PYTHON_VERSION=2.7
+  - PYTHON_VERSION=3.6
+  - PYTHON_VERSION=3.7
+  - PYTHON_VERSION=3.8
 
-# Command to run tests, e.g. python setup.py test
-script: tox
+os:
+  - osx
+  - linux
+  - windows
 
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  user: dcorre
-  password:
-    secure: PLEASE_REPLACE_ME
-  on:
-    tags: true
-    repo: dcorre/pyGRBaglow
-    python: 3.6
+# bail-out early for failures
+fast_finish: true
+
+before_install:
+  - source ./ci/conda4travis_before.sh
+
+install:
+  - set -ex;
+  # install miniconda, create env, and activate
+  - source ./ci/conda4travis.sh
+  # install this package
+  - python setup.py develop
+
+# run tests
+script: 
+  - pytest --cov-report=xml --cov=pyGRBaglow tests/
+
+# perform coverage
+after_success:
+  - codecov

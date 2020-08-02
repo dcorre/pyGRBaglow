@@ -4,6 +4,7 @@
 """Tests for `pyGRBaglow` package."""
 
 import pytest
+import numpy.testing as npt
 
 from click.testing import CliRunner
 
@@ -36,3 +37,34 @@ def test_command_line_interface():
     help_result = runner.invoke(cli.main, ['--help'])
     assert help_result.exit_code == 0
     assert '--help  Show this message and exit.' in help_result.output
+
+def test_simple_run()
+    """ Test a single simple run  """
+    from pyGRBaglow.synchrotron_model import fireball_afterglow as grb
+    import pyGRBaglow.constants as cc
+
+    # define GRB parameters
+    redshift = 3.92
+    n0 = 258.08
+    eps_b = 0.0272
+    eps_e = 0.547
+    E_iso = 4.41e53
+    eta=0.77
+    p=2.68  #>2
+    Y=0
+    ism_type=0
+
+    wavelength=np.logspace(-7,12,1e4) #in angstroms
+    time = [30/86400,10/1440,1/24,1] # in days
+    frequencies = 3e8 / (wavelength*1e-10)
+
+    #Load object
+    afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
+                  Y=Y, z=redshift, ism_type=ism_type, disp=0)
+    #Compute light curve for each time
+    afterglow_lc=afterglow.light_curve(time, frequencies)
+
+    expected_lc = np.genfromtxt('lc_test')
+
+    npt.assert_equal(expected_lc, afterglow_lc.T)
+
