@@ -1,0 +1,3 @@
+https://github.com/kangwonlee/travis-yml-conda-posix-nt
+
+https://github.com/trichter/conda4travis
