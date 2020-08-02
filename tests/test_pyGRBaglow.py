@@ -55,7 +55,7 @@ def test_simple_run():
     Y=0
     ism_type=0
 
-    wavelength=np.logspace(-7,12,1e4) #in angstroms
+    wavelength=np.logspace(-7,12,10000) #in angstroms
     time = [30/86400,10/1440,1/24,1] # in days
     frequencies = 3e8 / (wavelength*1e-10)
 
@@ -71,7 +71,7 @@ def test_simple_run():
 @pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc'])
 def test_dust_extinction_Pei(extLaw):
 
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     redshift = 1.5
     Av = 0.5
     trans_dust_host = reddening(wavelength, redshift, Av).Pei92(law=extLaw, 
@@ -82,7 +82,7 @@ def test_dust_extinction_Pei(extLaw):
 @pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc', 'linear','calzetti'])
 def test_dust_extinction_Li(extLaw):
 
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     redshift = 1.5
     Av = 0.5
     trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
@@ -93,7 +93,7 @@ def test_dust_extinction_Li(extLaw):
                                     'linear','calzetti', 'grb1', 'grb2'])
 def test_dust_extinction_Li(extLaw):
 
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     redshift = 1.5
     Av = 0.5
     trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
@@ -103,7 +103,7 @@ def test_dust_extinction_Li(extLaw):
 @pytest.mark.parametrize("NHx", [0.2, 1])
 def test_gas_absorption(NHx):
 
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     redshift = 1.5
     Av = 0.5
     npt.assert_allclose(4 * Av * 1.79e21,
@@ -121,7 +121,7 @@ def test_gas_absorption(NHx):
 @pytest.mark.parametrize("igm_model", ['meiksin', 'madau'])
 def test_igm(igm_model, z):
     from pyGRBaglow.igm import meiksin, madau
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     if igm_model == 'meiksin':
         trans = meiksin(wavelength/10,z,Xcut=True)
     elif igm_model == 'madau':
@@ -139,7 +139,7 @@ def test_igm(igm_model, z):
 @pytest.mark.parametrize("NHI", [1e15, 1e20])
 def test_dla(z, NHI):
     from pyGRBaglow.igm import dla
-    wavelength = np.logspace(-7,12,1e4)
+    wavelength = np.logspace(-7,12,10000)
     trans = dla(wavelength, z, NHI)
     if z == 1.5:
         label = '15'
