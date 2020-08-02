@@ -4,13 +4,14 @@
 """Tests for `pyGRBaglow` package."""
 
 import pytest
+import numpy as np
 import numpy.testing as npt
 
 from click.testing import CliRunner
 
-from pyGRBaglow import pyGRBaglow
 from pyGRBaglow import cli
 
+from pyGRBaglow.reddening import reddening
 
 @pytest.fixture
 def response():
@@ -38,7 +39,7 @@ def test_command_line_interface():
     assert help_result.exit_code == 0
     assert '--help  Show this message and exit.' in help_result.output
 
-def test_simple_run()
+def test_simple_run():
     """ Test a single simple run  """
     from pyGRBaglow.synchrotron_model import fireball_afterglow as grb
     import pyGRBaglow.constants as cc
@@ -64,7 +65,90 @@ def test_simple_run()
     #Compute light curve for each time
     afterglow_lc=afterglow.light_curve(time, frequencies)
 
-    expected_lc = np.genfromtxt('lc_test')
+    expected_lc = np.genfromtxt('tests/data/lc_test.dat')
+    npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
 
-    npt.assert_equal(expected_lc, afterglow_lc.T)
+@pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc'])
+def test_dust_extinction_Pei(extLaw):
+
+    wavelength = np.logspace(-7,12,1e4)
+    redshift = 1.5
+    Av = 0.5
+    trans_dust_host = reddening(wavelength, redshift, Av).Pei92(law=extLaw, 
+                                                                Xcut=True)[1]
+    expected_trans = np.genfromtxt('tests/data/test_reddening_Pei_%s.dat' % extLaw)
+    npt.assert_allclose(expected_trans, trans_dust_host)
+
+@pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc', 'linear','calzetti'])
+def test_dust_extinction_Li(extLaw):
+
+    wavelength = np.logspace(-7,12,1e4)
+    redshift = 1.5
+    Av = 0.5
+    trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
+    expected_trans = np.genfromtxt('tests/data/test_reddening_Li_%s.dat' % extLaw)
+    npt.assert_allclose(expected_trans, trans_dust_host)
+
+@pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc',
+                                    'linear','calzetti', 'grb1', 'grb2'])
+def test_dust_extinction_Li(extLaw):
+
+    wavelength = np.logspace(-7,12,1e4)
+    redshift = 1.5
+    Av = 0.5
+    trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
+    expected_trans = np.genfromtxt('tests/data/test_reddening_Li_%s.dat' % extLaw)
+    npt.assert_allclose(expected_trans, trans_dust_host)
+
+@pytest.mark.parametrize("NHx", [0.2, 1])
+def test_gas_absorption(NHx):
+
+    wavelength = np.logspace(-7,12,1e4)
+    redshift = 1.5
+    Av = 0.5
+    npt.assert_allclose(4 * Av * 1.79e21,
+                        reddening(wavelength,1.5,Av=0.5).NHI_host())
+
+    trans = reddening(wavelength,1.5,Av=0.5).gas_absorption(NHx=NHx)
+    if NHx == 0.2:
+        label = '02'
+    elif NHx == 1:
+        label = '1'
+    expected_trans = np.genfromtxt('tests/data/test_gas_abs_%s.dat' % label)
+    npt.assert_allclose(expected_trans, trans)
+
+@pytest.mark.parametrize("z", [0.5, 2, 10])
+@pytest.mark.parametrize("igm_model", ['meiksin', 'madau'])
+def test_igm(igm_model, z):
+    from pyGRBaglow.igm import meiksin, madau
+    wavelength = np.logspace(-7,12,1e4)
+    if igm_model == 'meiksin':
+        trans = meiksin(wavelength/10,z,Xcut=True)
+    elif igm_model == 'madau':
+        trans = madau(wavelength,z,Xcut=True)
+    if z == 0.5:
+        label = '05'
+    elif z == 2:
+        label = '2'
+    elif z == 10:
+        label = '10'
+    expected_trans = np.genfromtxt('tests/data/test_igm_%s_%s.dat' % (igm_model, label))
+    npt.assert_allclose(expected_trans, trans)
+
+@pytest.mark.parametrize("z", [1.5, 5])
+@pytest.mark.parametrize("NHI", [1e15, 1e20])
+def test_dla(z, NHI):
+    from pyGRBaglow.igm import dla
+    wavelength = np.logspace(-7,12,1e4)
+    trans = dla(wavelength, z, NHI)
+    if z == 1.5:
+        label = '15'
+    elif z == 5:
+        label = '5'
+    if NHI == 1e15:
+        label2 = '1e15'
+    elif NHI == 1e20:
+        label2 = '1e20'
+    expected_trans = np.genfromtxt('tests/data/test_dla_%s_%s.dat' % (label, label2))
+    npt.assert_allclose(expected_trans, trans)
 
