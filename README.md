@@ -14,7 +14,7 @@ Development status
 Features
 --------
 * Compute Gamma-Ray Burst light curves using:
-    * standard synchrotron model of [Granot&Sari02](https://ui.adsabs.harvard.edu/abs/2002ApJ...568..820G/abstract).
+    * standard synchrotron model of [Granot&Sari+02](https://ui.adsabs.harvard.edu/abs/2002ApJ...568..820G/abstract).
     * empirical templates (Single power-law, Broken power-law)
 
 * These simulated light curves are extinguished along the line of sight due to the type and amount of dust in the host galaxy, and due to photons absorbed in the Intergalactic medium. 

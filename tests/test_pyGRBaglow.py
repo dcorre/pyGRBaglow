@@ -39,7 +39,7 @@ def test_command_line_interface():
     assert help_result.exit_code == 0
     assert '--help  Show this message and exit.' in help_result.output
 
-def test_simple_run():
+def test_synchroton_1():
     """ Test a single simple run  """
     from pyGRBaglow.synchrotron_model import fireball_afterglow as grb
     import pyGRBaglow.constants as cc
@@ -67,6 +67,58 @@ def test_simple_run():
 
     expected_lc = np.genfromtxt('tests/data/lc_test.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
+
+def test_synchrotron_2():
+    """ Test a single simple run with windy environment and inverse compton """
+    from pyGRBaglow.synchrotron_model import fireball_afterglow as grb
+    import pyGRBaglow.constants as cc
+
+    # define GRB parameters
+    redshift = 1
+    n0 = 1e-2
+    eps_b = 1e-5
+    eps_e = 1e-3
+    E_iso = 4.41e50
+    eta=0.8
+    p=2.2  #>2
+    Y=0.5
+    ism_type=2
+
+    wavelength=np.logspace(-7,12,10000) #in angstroms
+    time = [30/86400,1/24,1, 10] # in days
+    frequencies = 3e8 / (wavelength*1e-10)
+
+    #Load object
+    afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
+                  Y=Y, z=redshift, ism_type=ism_type, disp=0)
+    #Compute light curve for each time
+    afterglow_lc=afterglow.light_curve(time, frequencies)
+
+    expected_lc = np.genfromtxt('tests/data/test_lc_windy.dat')
+    npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
+
+@pytest.mark.parametrize("template", ['SPL', 'BPL'])
+def test_template(template):
+    """ Test a single simple run with SPL and BPL """
+    from pyGRBaglow.template_models import Templates
+
+    # define GRB parameters
+
+    wavelength=np.logspace(-7,12,10000) #in angstroms
+    time = [30/86400,1/24,1, 10] # in days
+
+    if template == 'SPL':
+        params = [-1, 1.5]
+    elif template == 'BPL':
+        params = [-1, -0.5, 1.5, 1]
+
+    #Load object
+    temp = Templates()
+    lc = temp.light_curve(wavelength, time, params, model=template)
+
+    expected_lc = np.genfromtxt('tests/data/test_lc_%s.dat' % template)
+    npt.assert_allclose(expected_lc, lc.T, rtol=1e-6, atol=0)
+
 
 @pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc'])
 def test_dust_extinction_Pei(extLaw):
@@ -125,7 +177,7 @@ def test_igm(igm_model, z):
     if igm_model == 'meiksin':
         trans = meiksin(wavelength/10,z,Xcut=True)
     elif igm_model == 'madau':
-        trans = madau(wavelength,z,Xcut=True)
+        trans = madau(wavelength,z, lylim=True, metals=True, Xcut=True)
     if z == 0.5:
         label = '05'
     elif z == 2:
@@ -151,4 +203,5 @@ def test_dla(z, NHI):
         label2 = '1e20'
     expected_trans = np.genfromtxt('tests/data/test_dla_%s_%s.dat' % (label, label2))
     npt.assert_allclose(expected_trans, trans)
+
 
