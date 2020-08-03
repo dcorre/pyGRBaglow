@@ -86,7 +86,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dcorre/pyGRBaglow',
-    download_url='https://github.com/dcorre/pyGRBaglow/archive/v0.1.1.tar.gz',
-    version='0.1.1',
+    download_url='https://github.com/dcorre/pyGRBaglow/archive/v0.1.2.tar.gz',
+    version='0.1.2',
     zip_safe=False,
 )
