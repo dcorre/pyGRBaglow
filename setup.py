@@ -53,17 +53,22 @@ extensions = [
                   extra_link_args=extra_link_args)
         ]
 setup(
-    author="David Corre, Alain Klotz",
+    author="David Corre",
     author_email='david.corre.fr@gmail.com',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
+        'Development Status :: 4 - Beta',
+        'Topic :: Scientific/Engineering :: Astronomy',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: Linux :: Ubuntu',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     description="GRB afterglow modelling with standard synchrotron model of Granot & Sari 2002",
     entry_points={
@@ -76,13 +81,14 @@ setup(
     license="MIT license",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='pyGRBaglow',
+    keywords=['GRB', 'afterglow', 'fireball', 'synchrotron', 'light curve'],
     name='pyGRBaglow',
     packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dcorre/pyGRBaglow',
+    download_url='',
     version='0.1.0',
     zip_safe=False,
 )
