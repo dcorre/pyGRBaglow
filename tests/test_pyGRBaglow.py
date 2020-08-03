@@ -56,16 +56,16 @@ def test_synchroton_1():
     ism_type=0
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,10/1440,1/24,1] # in days
+    time = np.array([30/86400,10/1440,1/24,1]) # in days
     frequencies = 3e8 / (wavelength*1e-10)
 
     #Load object
     afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
                   Y=Y, z=redshift, ism_type=ism_type, disp=0)
     #Compute light curve for each time
-    afterglow_lc=afterglow.light_curve(time, frequencies)
+    afterglow_lc=afterglow.light_curve(time, frequencies, 4)
 
-    expected_lc = np.genfromtxt('tests/data/lc_test.dat')
+    expected_lc = np.genfromtxt('tests/data/lc_synchrotron.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
 
 def test_synchrotron_2():
@@ -85,16 +85,16 @@ def test_synchrotron_2():
     ism_type=2
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,1/24,1, 10] # in days
+    time = np.array([30/86400,1/24,1, 10]) # in days
     frequencies = 3e8 / (wavelength*1e-10)
 
     #Load object
     afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
                   Y=Y, z=redshift, ism_type=ism_type, disp=0)
     #Compute light curve for each time
-    afterglow_lc=afterglow.light_curve(time, frequencies)
+    afterglow_lc=afterglow.light_curve(time, frequencies, 4)
 
-    expected_lc = np.genfromtxt('tests/data/test_lc_windy.dat')
+    expected_lc = np.genfromtxt('tests/data/lc_synchrotron_windy.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
 
 @pytest.mark.parametrize("template", ['SPL', 'BPL'])
@@ -105,7 +105,7 @@ def test_template(template):
     # define GRB parameters
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,1/24,1, 10] # in days
+    time = np.array([30/86400,1/24,1, 10]) # in days
 
     if template == 'SPL':
         params = [-1, 1.5]
@@ -203,5 +203,3 @@ def test_dla(z, NHI):
         label2 = '1e20'
     expected_trans = np.genfromtxt('tests/data/test_dla_%s_%s.dat' % (label, label2))
     npt.assert_allclose(expected_trans, trans)
-
-

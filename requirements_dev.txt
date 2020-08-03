@@ -7,7 +7,7 @@ codecov
 coverage
 Sphinx
 twine
-
+cython
 pytest
 pytest-runner
 pytest-cov
