@@ -61,9 +61,9 @@ def test_synchroton_1():
 
     #Load object
     afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
-                  Y=Y, z=redshift, ism_type=ism_type, disp=0)
+                  Y=Y, z=redshift, ism_type=ism_type, disp=0, num_threads=4)
     #Compute light curve for each time
-    afterglow_lc=afterglow.light_curve(time, frequencies, 4)
+    afterglow_lc=afterglow.light_curve(time, frequencies)
 
     expected_lc = np.genfromtxt('tests/data/lc_synchrotron.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
@@ -90,9 +90,9 @@ def test_synchrotron_2():
 
     #Load object
     afterglow=grb(n0=n0, eps_b=eps_b, eps_e=eps_e, E_iso=E_iso, eta=eta, p=p,
-                  Y=Y, z=redshift, ism_type=ism_type, disp=0)
+                  Y=Y, z=redshift, ism_type=ism_type, disp=0, num_threads=4)
     #Compute light curve for each time
-    afterglow_lc=afterglow.light_curve(time, frequencies, 4)
+    afterglow_lc=afterglow.light_curve(time, frequencies)
 
     expected_lc = np.genfromtxt('tests/data/lc_synchrotron_windy.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)

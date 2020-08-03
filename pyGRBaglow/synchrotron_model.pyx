@@ -15,13 +15,13 @@ cdef class fireball_afterglow(object):
     cdef long double E_iso, Msun, Mpc_to_cm, A
     cdef double Mdot_loss, DL
     cdef float n0, eps_b, eps_e, eta, p, Y, Vw, z, td, nu
-    cdef int ism_type, disp
+    cdef int ism_type, disp, num_threads
 
     def __cinit__(self, float n0=0.001, float eps_b=0.001, float eps_e=0.001,
                  long double E_iso=2*pow(10., 52.), float eta=0.1, float p=2.4,
                  float Y=0., double Mdot_loss=pow(10,-5), float Vw=1000.,
                  float z=1., float td=1., float nu=pow(10.,15.),
-                 int ism_type=0, int disp=0):
+                 int ism_type=0, int disp=0, int num_threads=1):
         self.n0 = n0
         self.eps_b = eps_b
         self.eps_e = eps_e
@@ -36,6 +36,7 @@ cdef class fireball_afterglow(object):
         self.nu = nu
         self.ism_type = ism_type
         self.disp = disp
+        self.num_threads = num_threads
         
         self.Msun = cc.m_sun
         self.Mpc_to_cm = cc.Mpc_cm
@@ -518,8 +519,7 @@ cdef class fireball_afterglow(object):
         return ff
 
     @cython.boundscheck(False)
-    def light_curve(self, double[:] time_series, double[:] frequencies,
-                    int num_threads):
+    def light_curve(self, double[:] time_series, double[:] frequencies):
         """ SImulate the afterglow light curve for a given wavelength"""
         #Make sure that we are working with arrays
         time_series = np.atleast_1d(time_series)
@@ -533,7 +533,7 @@ cdef class fireball_afterglow(object):
         self.DL = cosmo.luminosity_distance(self.z).value
         
         # Start with wavelength as it is the biggest array most of the time
-        for i in prange(nu1, nogil=True, num_threads=num_threads):
+        for i in prange(nu1, nogil=True, num_threads=self.num_threads):
             for j in range(t1):
                 # Flux in obs frame in mJy
                 lc[j,i] = self.granot_sari(td=time_series[j],nu=frequencies[i])
