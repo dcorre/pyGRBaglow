@@ -56,7 +56,7 @@ def test_synchroton_1():
     ism_type=0
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,10/1440,1/24,1] # in days
+    time = np.array([30/86400,10/1440,1/24,1]) # in days
     frequencies = 3e8 / (wavelength*1e-10)
 
     #Load object
