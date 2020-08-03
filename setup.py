@@ -3,8 +3,32 @@
 
 """The setup script."""
 
+import sys
 from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
+
+if sys.platform.startswith("win"):
+    # windows
+    define_macros = [('USE_OPENMP', None)]
+    libraries = ['kernel32']
+    extra_compile_args = ['/EHsc', '/O2', '/Gy', '/openmp']
+    extra_link_args = None
+elif sys.platform.startswith("darwin"):
+    # mac osx
+    define_macros = [('USE_OPENMP', None)]
+    libraries = None
+    extra_compile_args = ['-lpthread', '-stdlib=libc++',
+                          '-mmacosx-version-min=10.7', '-Xpreprocessor',
+                          '-fopenmp']
+    extra_link_args = ["-lomp"]
+else:
+    # linux
+    define_macros = [('USE_OPENMP', None)]
+    libraries = ["m"]
+    extra_compile_args = ['-lpthread', '-fopenmp', "-ffast-math"]
+    # option '-mavx2' forces the compiler to use
+    # AVX instructions the processor might not have
+    extra_link_args = ['-lgomp', "-ffast-math", "-fopenmp"]
 
 with open('README.md') as readme_file:
     readme = readme_file.read()
@@ -26,9 +50,9 @@ test_requirements = ['pytest', ]
 
 extensions = [ 
         Extension("pyGRBaglow.synchrotron_model", ["pyGRBaglow/synchrotron_model.pyx"],
-                  libraries=["m"],
-                  extra_compile_args=["-ffast-math", "-fopenmp"],
-                  extra_link_args=["-ffast-math", "-fopenmp"])
+                  libraries=libraries,
+                  extra_compile_args=extra_compile_args,
+                  extra_link_args=extra_link_args)
         ]
 setup(
     author="David Corre, Alain Klotz",

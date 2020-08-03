@@ -538,4 +538,4 @@ cdef class fireball_afterglow(object):
                 # Flux in obs frame in mJy
                 lc[j,i] = self.granot_sari(td=time_series[j],nu=frequencies[i])
 
-        return np.asarray(lc)
+        return np.array(lc)
