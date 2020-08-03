@@ -65,7 +65,7 @@ def test_synchroton_1():
     #Compute light curve for each time
     afterglow_lc=afterglow.light_curve(time, frequencies, 4)
 
-    expected_lc = np.genfromtxt('tests/data/lc_test.dat')
+    expected_lc = np.genfromtxt('tests/data/lc_synchrotron.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
 
 def test_synchrotron_2():
@@ -94,7 +94,7 @@ def test_synchrotron_2():
     #Compute light curve for each time
     afterglow_lc=afterglow.light_curve(time, frequencies, 4)
 
-    expected_lc = np.genfromtxt('tests/data/test_lc_windy.dat')
+    expected_lc = np.genfromtxt('tests/data/lc_synchrotron_windy.dat')
     npt.assert_allclose(expected_lc, afterglow_lc.T, rtol=1e-6, atol=0)
 
 @pytest.mark.parametrize("template", ['SPL', 'BPL'])
