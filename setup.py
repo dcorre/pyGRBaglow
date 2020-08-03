@@ -10,13 +10,11 @@ from Cython.Build import cythonize
 # Lines adapted from https://github.com/sdpython/td3a_cpp
 if sys.platform.startswith("win"):
     # windows
-    define_macros = [('USE_OPENMP', None)]
     libraries = ['kernel32']
     extra_compile_args = ['/EHsc', '/O2', '/Gy', '/openmp']
     extra_link_args = None
 elif sys.platform.startswith("darwin"):
     # mac osx
-    define_macros = [('USE_OPENMP', None)]
     libraries = None
     extra_compile_args = ['-lpthread', '-stdlib=libc++',
                           '-mmacosx-version-min=10.7', '-Xpreprocessor',
@@ -24,7 +22,6 @@ elif sys.platform.startswith("darwin"):
     extra_link_args = ["-lomp"]
 else:
     # linux
-    define_macros = [('USE_OPENMP', None)]
     libraries = ["m"]
     extra_compile_args = ['-lpthread', '-fopenmp', "-ffast-math"]
     # option '-mavx2' forces the compiler to use
@@ -68,7 +65,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="GRB afterglow modelling with standard synchrotron model",
+    description="GRB afterglow modelling with standard synchrotron model of Granot & Sari 2002",
     entry_points={
         'console_scripts': [
             'pyGRBaglow=pyGRBaglow.cli:main',
