@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Install openmp on osx
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    brew install llvm libomp
-    export CPP=/usr/local/opt/llvm/bin/clang;
-fi;
+#if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+#    brew install llvm libomp
+#    export CPP=/usr/local/opt/llvm/bin/clang;
+#fi;
 
 # begin installing miniconda
 if [[ "$TRAVIS_OS_NAME" != "windows" ]]; then
