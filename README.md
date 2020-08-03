@@ -22,10 +22,15 @@ Features
     * Intergalactic medium (IGM) mean transmission along one line of sight for a given redshift for a given redshift. 2 models available: [Madau+95](http://adsabs.harvard.edu/abs/1995ApJ...441...18M) and [Meiksin+06](http://adsabs.harvard.edu/abs/2006MNRAS.365..807M).
     * Photoelectric absorption model based on cross sections of [McCammon+93](http://adsabs.harvard.edu/abs/1983ApJ...270..119M).
 
+* Use of cython to speed up the execution time, as well as parallelisation using openmp.
+
+* Build successfully on Linux, macOS and Windows.
+
 
 Installation
 ------------
-See the doc: https://pyGRBaglow.readthedocs.io.
+
+pip install pyGRBaglow
 
 
 Credits
