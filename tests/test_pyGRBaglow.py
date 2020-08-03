@@ -85,7 +85,7 @@ def test_synchrotron_2():
     ism_type=2
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,1/24,1, 10] # in days
+    time = np.array([30/86400,1/24,1, 10]) # in days
     frequencies = 3e8 / (wavelength*1e-10)
 
     #Load object
@@ -105,7 +105,7 @@ def test_template(template):
     # define GRB parameters
 
     wavelength=np.logspace(-7,12,10000) #in angstroms
-    time = [30/86400,1/24,1, 10] # in days
+    time = np.array([30/86400,1/24,1, 10]) # in days
 
     if template == 'SPL':
         params = [-1, 1.5]
