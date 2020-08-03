@@ -7,6 +7,7 @@ import sys
 from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
 
+# Lines adapted from https://github.com/sdpython/td3a_cpp
 if sys.platform.startswith("win"):
     # windows
     define_macros = [('USE_OPENMP', None)]
@@ -17,10 +18,9 @@ elif sys.platform.startswith("darwin"):
     # mac osx
     define_macros = [('USE_OPENMP', None)]
     libraries = None
-    #extra_compile_args = ['-lpthread', '-stdlib=libc++',
-    #                      '-mmacosx-version-min=10.7', '-Xpreprocessor',
-    #                      '-fopenmp']
-    extra_compile_args = ['-lpthread', '-fopenmp']
+    extra_compile_args = ['-lpthread', '-stdlib=libc++',
+                          '-mmacosx-version-min=10.7', '-Xpreprocessor',
+                          '-fopenmp']
     extra_link_args = ["-lomp"]
 else:
     # linux
