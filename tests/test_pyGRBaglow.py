@@ -142,18 +142,6 @@ def test_dust_extinction_Pei(extLaw):
     npt.assert_allclose(expected_trans, trans_dust_host)
 
 
-@pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc', 'linear', 'calzetti'])
-def test_dust_extinction_Li(extLaw):
-
-    wavelength = np.logspace(-7, 12, 10000)
-    redshift = 1.5
-    Av = 0.5
-    trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
-    expected_trans = np.genfromtxt('tests/data/test_reddening_Li_%s.dat'
-                                   % extLaw)
-    npt.assert_allclose(expected_trans, trans_dust_host)
-
-
 @pytest.mark.parametrize("extLaw", ['mw', 'lmc', 'smc',
                                     'linear', 'calzetti', 'grb1', 'grb2'])
 def test_dust_extinction_Li(extLaw):
@@ -161,7 +149,8 @@ def test_dust_extinction_Li(extLaw):
     wavelength = np.logspace(-7, 12, 10000)
     redshift = 1.5
     Av = 0.5
-    trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw)[1]
+    trans_dust_host = reddening(wavelength, redshift, Av).Li07(extLaw,
+                                                               Xcut=True)[1]
     expected_trans = np.genfromtxt('tests/data/test_reddening_Li_%s.dat'
                                    % extLaw)
     npt.assert_allclose(expected_trans, trans_dust_host)
