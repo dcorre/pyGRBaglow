@@ -207,6 +207,7 @@ class reddening(object):
             transmission through dust as a function of wavelength
 
         """
+
         wvl = self.wavelength * 1e-4 / (1 + self.z)
         if ext_law.lower() == 'smc':
             if Rv == 'default':
