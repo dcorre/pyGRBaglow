@@ -7,7 +7,7 @@ import sys
 from setuptools import setup, find_packages, Extension
 from Cython.Build import cythonize
 
-# Lines adapted from https://github.com/sdpython/td3a_cpp
+# Lines adapted from https://github.com/sdpython/td3a_cpp
 if sys.platform.startswith("win"):
     # windows
     libraries = ['kernel32']
@@ -40,14 +40,16 @@ requirements = [
         'astropy',
         'scipy',
         'jupyter',
-        'matplotlib']
+        'matplotlib'
+        'cython']
 
 setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest', ]
 
-extensions = [ 
-        Extension("pyGRBaglow.synchrotron_model", ["pyGRBaglow/synchrotron_model.pyx"],
+extensions = [
+        Extension("pyGRBaglow.synchrotron_model",
+                  ["pyGRBaglow/synchrotron_model.pyx"],
                   libraries=libraries,
                   extra_compile_args=extra_compile_args,
                   extra_link_args=extra_link_args)
@@ -67,13 +69,14 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="GRB afterglow modelling with standard synchrotron model of Granot & Sari 2002",
+    description="GRB afterglow modelling with standard synchrotron"
+                "model of Granot & Sari 2002",
     entry_points={
         'console_scripts': [
             'pyGRBaglow=pyGRBaglow.cli:main',
         ],
     },
-    ext_modules = cythonize(extensions),
+    ext_modules=cythonize(extensions),
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
@@ -86,7 +89,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/dcorre/pyGRBaglow',
-    download_url='https://github.com/dcorre/pyGRBaglow/archive/v0.1.2.tar.gz',
-    version='0.1.2',
+    download_url='https://github.com/dcorre/pyGRBaglow/archive/v0.1.3.tar.gz',
+    version='0.1.3',
     zip_safe=False,
 )

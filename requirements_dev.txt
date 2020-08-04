@@ -1,5 +1,6 @@
 pip
 bumpversion
+cython
 wheel
 watchdog
 flake8
@@ -7,7 +8,6 @@ codecov
 coverage
 Sphinx
 twine
-cython
 pytest
 pytest-runner
 pytest-cov

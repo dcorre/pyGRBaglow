@@ -10,6 +10,19 @@ You can install it with pip:
 
     pip install pyGRBaglow
 
+It requires a compiler because of the usage of cython and openmp.
+
+On MacOs, you can install llvm and libomp:
+
+.. code-block:: console
+
+    brew install llvm libomp
+
+    export CPP=/usr/local/opt/llvm/bin/clang;
+
+
+For Windows, only thing I know is that it builds successfully in Travis. So if installation using pip fails, look at the setup.py to have information about the compiler flags and build it yourself.
+
 
 Installation from sources
 -------------------------
