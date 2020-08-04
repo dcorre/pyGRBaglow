@@ -40,7 +40,7 @@ requirements = [
         'astropy',
         'scipy',
         'jupyter',
-        'matplotlib'
+        'matplotlib',
         'cython']
 
 setup_requirements = ['pytest-runner', ]
