@@ -153,7 +153,7 @@ def test_dust_extinction_Li(extLaw):
                                                                Xcut=True)[1]
     expected_trans = np.genfromtxt('tests/data/test_reddening_Li_%s.dat'
                                    % extLaw)
-    npt.assert_allclose(expected_trans, trans_dust_host)
+    npt.assert_allclose(expected_trans, trans_dust_host, rtol=1e-5)
 
 
 @pytest.mark.parametrize("NHx", [0.2, 1])

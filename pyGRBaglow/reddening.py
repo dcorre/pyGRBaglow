@@ -143,10 +143,10 @@ class reddening(object):
 
         # Second term accounting for the near-IR/visible extinction
         # Ugly hack to fix non understood indetation pb with pep8
-        IR_vis_ext = 1. * ((233. * (1. - c1 /
-                                    (6.88**c2 + 0.145**c2 + c3) - c4 / 4.60))
-                           / ((wavel_mic / 0.046)**2. +
-                              (0.046 / wavel_mic)**2. + 90.))
+        IR_vis_ext = ((233. * (1. - c1 /
+                               (6.88**c2 + 0.145**c2 + c3) - c4 / 4.60))
+                      / ((wavel_mic / 0.046)**2. +
+                         (0.046 / wavel_mic)**2. + 90.))
 
         # Third term accounting for the 2175 Angstrom extinction bump
         PAH_bump = c4 / ((wavel_mic / 0.2175)**2. +
