@@ -145,8 +145,8 @@ class reddening(object):
         # Ugly hack to fix non understood indetation pb with pep8
         IR_vis_ext = 1. * ((233. * (1. - c1 /
                                     (6.88**c2 + 0.145**c2 + c3) - c4 / 4.60))
-                           ((wavel_mic / 0.046)**2. +
-                            (0.046 / wavel_mic)**2. + 90.))
+                           / ((wavel_mic / 0.046)**2. +
+                              (0.046 / wavel_mic)**2. + 90.))
 
         # Third term accounting for the 2175 Angstrom extinction bump
         PAH_bump = c4 / ((wavel_mic / 0.2175)**2. +
@@ -222,7 +222,7 @@ class reddening(object):
             a = [175, 19, 0.023, 0.005, 0.006, 0.02]
             wvl_ = [0.046, 0.08, 0.22, 9.7, 18, 25]
             b = [90, 5.5, -1.95, -1.95, -1.8, 0.0]
-            n = [2.0, 4.5, 2.0, 2.0, 2.0, 2.0]
+            n = [2.0, 4.5, 2.0, 2.0, 2.0, 2.0]
 
         elif ext_law.lower() == 'mw':
             if Rv == 'default':

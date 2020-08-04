@@ -238,11 +238,10 @@ def madau(wavelength, redshift, lylim=False,
     if lylim:
         xc = wavelength[w] / Lyman_limit
         xm = 1 + redshift
-        tau_eff[w] += 0.25 * (xc**3. * (xm**0.46 - xc**0.46) + 9.4 * xc**1.5
-                              * (xm**0.18 - xc**0.18) - 0.7 * xc**3.
-                              * (xc**(-1.32) - xm**(-1.32)) - 0.023
-                              * (xm**1.68 - xc**1.68))
-
+        tau_eff[w] += (0.25 * xc**3. * (xm**0.46 - xc**0.46) + 9.4 * xc**1.5
+                       * (xm**0.18 - xc**0.18) - 0.7 * xc**3.
+                       * (xc**(-1.32) - xm**(-1.32)) - 0.023
+                       * (xm**1.68 - xc**1.68))
     else:
         # transmission set to zero
         tau_eff[w] = np.inf

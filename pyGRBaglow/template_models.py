@@ -94,16 +94,16 @@ class Templates(object):
                + (t / self.t0)**(-s * alpha2))**(-1/s)
         return F
 
-    def light_curve(self, wvl, t, params, model='SPL'):
+    def light_curve(self, wavelength, time, params, model='SPL'):
         """ Compute light curves
 
         Parameters
         ----------
-        wvl : `array` or `float`
+        wavelength : `array` or `float`
             wavelength at which to compute the flux
             Must be same unit as wwl0
 
-        t: `array` or `float`
+        time: `array` or `float`
             time at which to compute the flux
             Same unit as t0
 

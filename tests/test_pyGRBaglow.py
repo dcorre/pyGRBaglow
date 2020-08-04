@@ -191,7 +191,7 @@ def test_igm(igm_model, z):
     from pyGRBaglow.igm import meiksin, madau
     wavelength = np.logspace(-7, 12, 10000)
     if igm_model == 'meiksin':
-        trans = meiksin(wavelength/10., z, Xcut=True)
+        trans = meiksin(wavelength/10, z, Xcut=True)
     elif igm_model == 'madau':
         trans = madau(wavelength, z, lylim=True, metals=True, Xcut=True)
     if z == 0.5:
