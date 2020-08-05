@@ -12,7 +12,7 @@ You can install it with pip:
 
 It requires a compiler because of the usage of cython and openmp.
 
-On MacOs, you can install llvm and libomp:
+On MacOs, if it fails check if you have installed llvm and libomp. Otherwise intall them:
 
 .. code-block:: console
 
