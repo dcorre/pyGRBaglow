@@ -52,7 +52,12 @@ extensions = [
                   ["pyGRBaglow/synchrotron_model.pyx"],
                   libraries=libraries,
                   extra_compile_args=extra_compile_args,
-                  extra_link_args=extra_link_args)
+                  extra_link_args=extra_link_args),
+        Extension("pyGRBaglow.igm_cy",
+                  ["pyGRBaglow/igm_cy.pyx"],
+                  libraries=libraries,
+                  extra_compile_args=extra_compile_args,
+                  extra_link_args=extra_link_args),
         ]
 setup(
     author="David Corre",
