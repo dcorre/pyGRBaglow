@@ -56,7 +56,7 @@ cpdef (double, double, double, double, double, double, double)  set_Meiksin_para
 cpdef double meiksin_float(double wavelength, double[:] fact, double[:] idx_float,
                           double redshift, double gamma, double n0, double lambda_limit, double tau_a,
                           double lambda_min_igm, double term1, double term2,
-                          bint lylim=True, bint lls_fact=True, bint Xcut=True, double Xlim=10.) nogil:
+                          bint lylim=True, bint lls_fact=False, bint Xcut=True, double Xlim=10.) nogil:
     cdef Py_ssize_t i, k
     cdef Py_ssize_t n_transitions_low = 10
     cdef Py_ssize_t n_transitions_max = 31
@@ -152,7 +152,7 @@ cpdef double meiksin_float(double wavelength, double[:] fact, double[:] idx_floa
 
 
 def meiksin(double[:] wavelength, double redshift, str unit="angstroms", bint lylim=True,
-            bint lls_fact=True, bint Xcut=True, double Xlim=10., int num_threads=1):
+            bint lls_fact=False, bint Xcut=True, double Xlim=10., int num_threads=1):
     """Intergalactic transmission (Meiksin, 2006)
 
     Compute the intergalactic transmission as described in Meiksin, 2006.

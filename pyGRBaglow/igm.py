@@ -12,7 +12,7 @@ import numpy as np
 from scipy.special import factorial
 
 
-def meiksin(wavelength, redshift, lylim=True, lls_fact=True, Xcut=True, Xlim=10):
+def meiksin(wavelength, redshift, lylim=True, lls_fact=False, Xcut=True, Xlim=10):
     """Intergalactic transmission (Meiksin, 2006)
 
     Compute the intergalactic transmission as described in Meiksin, 2006.
