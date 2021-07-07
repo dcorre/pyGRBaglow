@@ -48,7 +48,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
 
     wvl = wavelength * 1e-4 / (1 + z)
     if ext_law.lower() == "smc":
-        if Rv == "default":
+        if Rv == -99.:
             Rv = 2.93
         a = [185, 27, 0.005, 0.010, 0.012, 0.03]
         wvl_ = [0.042, 0.08, 0.22, 9.7, 18, 25]
@@ -56,7 +56,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
         n = [2.0, 4.0, 2.0, 2.0, 2.0, 2.0]
 
     elif ext_law.lower() == "lmc":
-        if Rv == "default":
+        if Rv == -99.:
             Rv = 3.16
         a = [175, 19, 0.023, 0.005, 0.006, 0.02]
         wvl_ = [0.046, 0.08, 0.22, 9.7, 18, 25]
@@ -64,7 +64,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
         n = [2.0, 4.5, 2.0, 2.0, 2.0, 2.0]
 
     elif ext_law.lower() == "mw":
-        if Rv == "default":
+        if Rv == -99.:
             Rv = 3.08
         a = [165, 14, 0.045, 0.002, 0.002, 0.012]
         wvl_ = [0.046, 0.08, 0.22, 9.7, 18, 25]
