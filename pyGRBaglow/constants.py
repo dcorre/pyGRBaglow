@@ -36,7 +36,7 @@ zero_celsius = 273.15
 
 # Black body constants
 BBT = H_planck / K_boltzman
-BBO = 2. * H_planck / c_light_m_s**2.
+BBO = 2.0 * H_planck / c_light_m_s ** 2.0
 
 # Zero point magnitude
 # Jy mag=0
@@ -68,11 +68,11 @@ Mpc_km = Mpc_cm * 1e-5
 # Angstrom in cm
 angstrom_cm = 1e-8
 # a year in s
-yr_s = 365. * 24. * 60. * 60.
+yr_s = 365.0 * 24.0 * 60.0 * 60.0
 # Megayear in s
-Myr_s = 1.e6 * yr_s
+Myr_s = 1.0e6 * yr_s
 # Gigayear in s
-Gyr_s = 1.e9 * yr_s
+Gyr_s = 1.0e9 * yr_s
 # atomic mass unit in g
 amu_g = 1.66053886e-24
 # mass of a proton in g
@@ -92,11 +92,11 @@ c_light_Mpc_s = c_light_cm_s / Mpc_cm
 # Speed of light in Mpc/Gyr
 c_light_Mpc_Gyr = Gyr_s * c_light_cm_s / Mpc_cm
 # km/s/Mpc
-H100_km_s_Mpc = 100.
+H100_km_s_Mpc = 100.0
 # 100 km s^-1 Mpc^-1 in s^-1
-H100_s = 100. / Mpc_km
+H100_s = 100.0 / Mpc_km
 # Gravitational constant in Mpc^3 msun^-1 s^-2
-G_const_Mpc_Msun_s = M_sun_g * (6.673e-8) / Mpc_cm**3.
+G_const_Mpc_Msun_s = M_sun_g * (6.673e-8) / Mpc_cm ** 3.0
 # Central wavelength of H Lyman-alpha in Angstroms
 lambda_Lya_0 = 1215.67
 # Central wavelength of an NV doublet in Angstroms
@@ -106,4 +106,4 @@ alpha_B_cm_s_1e4 = 2.59e-13
 # Thomson cross section in cm^2
 sigma_T_cm = 6.6524586e-25
 # Thomson cross section in Mpc^2
-sigma_T_Mpc = sigma_T_cm / (Mpc_cm ** 2.)
+sigma_T_Mpc = sigma_T_cm / (Mpc_cm ** 2.0)

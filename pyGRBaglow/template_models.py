@@ -32,7 +32,7 @@ class Templates(object):
         return None
 
     def SPL(self, wvl, t, alpha, beta):
-        """ Simple Power Law.
+        """Simple Power Law.
 
         Parameters
         ----------
@@ -56,11 +56,11 @@ class Templates(object):
 
         """
 
-        flux = self.F0 * (t / self.t0)**(-alpha) * (wvl / self.wvl0)**(beta)
+        flux = self.F0 * (t / self.t0) ** (-alpha) * (wvl / self.wvl0) ** (beta)
         return flux
 
     def BPL(self, wvl, t, alpha1, alpha2, beta, s):
-        """ Broken Power Law.
+        """Broken Power Law.
 
         Parameters
         ----------
@@ -89,13 +89,16 @@ class Templates(object):
         flux: `array` or `float`
 
         """
-        F = self.F0 * (wvl / self.wvl0)**(beta) \
-            * ((t / self.t0)**(-s * alpha1)
-               + (t / self.t0)**(-s * alpha2))**(-1/s)
+        F = (
+            self.F0
+            * (wvl / self.wvl0) ** (beta)
+            * ((t / self.t0) ** (-s * alpha1) + (t / self.t0) ** (-s * alpha2))
+            ** (-1 / s)
+        )
         return F
 
-    def light_curve(self, wavelength, time, params, model='SPL'):
-        """ Compute light curves
+    def light_curve(self, wavelength, time, params, model="SPL"):
+        """Compute light curves
 
         Parameters
         ----------
@@ -129,14 +132,13 @@ class Templates(object):
         for t in range(t1):
             sed = []
             for wvl in range(wvl1):
-                if model == 'SPL':
+                if model == "SPL":
                     alpha, beta = params
                     SED = self.SPL(wavelength[wvl], time[t], alpha, beta)
 
-                elif model == 'BPL':
+                elif model == "BPL":
                     alpha1, alpha2, beta, s = params
-                    SED = self.BPL(wavelength[wvl], time[t],
-                                   alpha1, alpha2, beta, s)
+                    SED = self.BPL(wavelength[wvl], time[t], alpha1, alpha2, beta, s)
                 # Flux in obs frame in same unit as F0
                 sed.append(SED)
             # Flux in obs frame in same unit as F0
