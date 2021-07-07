@@ -12,7 +12,7 @@ import numpy as np
 from scipy.special import factorial
 
 
-def meiksin(wavelength, redshift, lylim=True, lls_fact=False, Xcut=True, Xlim=10):
+def meiksin(wavelength, redshift, unit="nm", lylim=True, lls_fact=False, Xcut=True, Xlim=10):
     """Intergalactic transmission (Meiksin, 2006)
 
     Compute the intergalactic transmission as described in Meiksin, 2006.
@@ -45,6 +45,9 @@ def meiksin(wavelength, redshift, lylim=True, lls_fact=False, Xcut=True, Xlim=10
         The intergalactic transmission at each input wavelength.
 
     """
+    if unit == "angstroms":
+        wavelength = wavelength /10.
+
     # Check if the wavelength is a scalar or an array
     # Otherwise can not iterate over 0-d array
     wavelength = np.atleast_1d(wavelength)
