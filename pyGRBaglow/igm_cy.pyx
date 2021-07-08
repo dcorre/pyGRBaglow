@@ -151,7 +151,7 @@ cpdef double meiksin_float(double wavelength, double[:] fact, double[:] idx_floa
     return igm_transmission
 
 
-def meiksin(double[:] wavelength, double redshift, str unit="angstroms", bint lylim=True,
+def meiksin(double[:] wavelength, double redshift, str unit="nm", bint lylim=True,
             bint lls_fact=False, bint Xcut=True, double Xlim=10., int num_threads=1):
     """Intergalactic transmission (Meiksin, 2006)
 
