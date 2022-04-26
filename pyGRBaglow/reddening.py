@@ -48,7 +48,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
 
     wvl = wavelength * 1e-4 / (1 + z)
     if ext_law.lower() == "smc":
-        if Rv == -99.:
+        if Rv == -99.0:
             Rv = 2.93
         a = [185, 27, 0.005, 0.010, 0.012, 0.03]
         wvl_ = [0.042, 0.08, 0.22, 9.7, 18, 25]
@@ -56,7 +56,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
         n = [2.0, 4.0, 2.0, 2.0, 2.0, 2.0]
 
     elif ext_law.lower() == "lmc":
-        if Rv == -99.:
+        if Rv == -99.0:
             Rv = 3.16
         a = [175, 19, 0.023, 0.005, 0.006, 0.02]
         wvl_ = [0.046, 0.08, 0.22, 9.7, 18, 25]
@@ -64,7 +64,7 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
         n = [2.0, 4.5, 2.0, 2.0, 2.0, 2.0]
 
     elif ext_law.lower() == "mw":
-        if Rv == -99.:
+        if Rv == -99.0:
             Rv = 3.08
         a = [165, 14, 0.045, 0.002, 0.002, 0.012]
         wvl_ = [0.046, 0.08, 0.22, 9.7, 18, 25]
@@ -79,6 +79,76 @@ def Pei92(wavelength, Av, z, Rv=-99.0, ext_law="smc", Xcut=False):
     # outside the range defined in Pei92
     # convert Alambda_over_Ab to Alambda_over_Av
     Alambda_over_Av = (1.0 / Rv + 1.0) * sums
+
+    # Applied a cut for wavelength below 700 angstrom
+    # Useful when coupling with Xray data
+    if Xcut:
+        w = np.where(wvl < 0.07)
+        Alambda_over_Av[w] = 0
+
+    # Return optical depth due to dust reddening in funtion of wavelength
+    Tau_dust = Av * Alambda_over_Av / 1.086
+
+    Trans_dust = np.exp(-Tau_dust)
+
+    Trans_dust[Trans_dust < 0] = 0
+    Trans_dust[Trans_dust > 1] = 1
+
+    return [Alambda_over_Av, Trans_dust]
+
+
+def sne(wavelength, Av, z, Xcut=False):
+    """
+    Extinction law for SNe
+
+    Parameters
+    ----------
+    wavelength: `array` or `float`
+        wavlength in angstroms
+
+    Av: `float`
+        amount of extinction in the V band
+
+    z: `float`
+        redshift
+
+    Xcut: `boolean`, optional, default: False
+         Whether to set attenuation to 0 for wavelength below 700 angstrom
+         Useful when coupling with X-ray data
+
+    Returns
+    -------
+    [Alambda_over_Av, Trans_dust]
+
+    Alambda_over_Av : `array`
+        atteanuation as a function of wavelength normalise by Av
+        (attenuation in V band)
+
+    Trans_dust: `array`
+        transmission through dust as a function of wavelength
+
+    """
+
+    wvl = wavelength * 1e-4 / (1 + z)
+
+    mask = wvl < 1000 * 1e-4
+    Alambda_over_Av = np.zeros(len(wvl))
+    # Fit available above 1000 Angstroms
+    Alambda_over_Av[~mask] = (
+        -2.2113e-05 / (wvl[~mask]) ** 8
+        + 9.7507e-04 / (wvl[~mask]) ** 7
+        - 1.7447e-02 / (wvl[~mask]) ** 6
+        + 1.6186e-01 / (wvl[~mask]) ** 5
+        - 8.2474e-01 / (wvl[~mask]) ** 4
+        + 2.262 / (wvl[~mask]) ** 3
+        - 3.13 / (wvl[~mask]) ** 2
+        + 2.591 / (wvl[~mask])
+        - 6.5916e-01
+    )
+    # Below 1000 Angstroms, use a rescaled SMC extinction law
+    Alambda_over_Av[mask] = (
+        Pei92(wavelength[mask], Av, z, ext_law="smc", Xcut=Xcut)[0] * 0.75794464
+    )
 
     # Applied a cut for wavelength below 700 angstrom
     # Useful when coupling with Xray data
@@ -131,8 +201,8 @@ def gas_absorption(wavelength, z, NHx=0.2):
         nu = nus[i] * (1 + z)
         # photon energy (keV) in the rest frame
         E_kev = nu * cc.H_planck / (1e3 * cc.e_elec)
-        E_kev2 = E_kev ** 2.0
-        E_kev3 = E_kev ** 3.0
+        E_kev2 = E_kev**2.0
+        E_kev3 = E_kev**3.0
 
         # if E_kev < 13.6e-3:    #912 A (Lyman limit)
         #     c0=0; c1=0; c2=0

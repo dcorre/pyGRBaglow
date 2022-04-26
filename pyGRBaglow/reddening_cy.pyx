@@ -18,7 +18,7 @@ cpdef double[:, ::1] Pei92_params(str ext_law="smc"):
         type of extinction law to use.
         Choices: mw, lmc, smc
     """
-    cdef double[:,::1] params
+    cdef double[:,::1] params = np.zeros((4,6), dtype=np.float64)
 
     if ext_law == 'smc':
         params = np.array(
@@ -56,6 +56,12 @@ cpdef double Pei92_float(double wavel, double z, double[:,::1] params,
 
     Parameters
     ----------
+    wavel: `float`
+        wavelength in angstroms
+
+    z: `float`
+        redshift
+
     Rv: `float`, optional, default: -99.
         selective attenuation Rv = Av / E(B-V)
         if =-99. set values by default from article
@@ -97,10 +103,10 @@ cpdef double Pei92_float(double wavel, double z, double[:,::1] params,
     Alambda_over_Av = (1. / Rv + 1.) * sums
     # Assume nothing get absorbed below 700 angstroms as there is the IGM absorption
     # and the analytical formula of Pei92 has a transmission starting increasing at wvl < 800ang
-    if Xcut and wvl < 0.07:
-        # Applied a cut for wavelength below 700 angstrom
-        # Useful when coupling with Xray data
-        Alambda_over_Av = 0.
+    #if Xcut and wvl < 0.07:
+    #    # Applied a cut for wavelength below 700 angstrom
+    #    # Useful when coupling with Xray data
+    #    Alambda_over_Av = 0.
 
     return Alambda_over_Av
 
@@ -180,6 +186,116 @@ def Pei92(double[:] wavelength, double Av, double z, double Rv=-99.,
         )
         Trans_dust[i] = get_trans(Alambda_over_Av[i], Av)
     
+    return Alambda_over_Av, Trans_dust
+
+cpdef double sne_float(double wavel, double z, double[:,::1] params, bint Xcut) nogil:
+    """
+    Extinction laws from Pei 1992 article
+
+    Parameters
+    ----------
+    wavel: `float`
+        wavelength in angstroms
+
+    z: `float`
+        redshift
+
+    Xcut: `boolean`, optional, default: False
+         Whether to set attenuation to 0 for wavelength below 700 angstrom
+         Useful when coupling with X-ray data
+
+    Returns
+    -------
+    Alambda_over_Av, Trans_dust
+
+    Alambda_over_Av : `array`
+        atteanuation as a function of wavelength normalise by Av
+        (attenuation in V band)
+
+    Trans_dust: `array`
+        transmission through dust as a function of wavelength
+
+    """
+    cdef Py_ssize_t i
+    cdef Py_ssize_t N = 4
+    cdef double sums = 0.
+    cdef double Alambda_over_Av
+    cdef double wvl
+    cdef double Rv = 2.93
+    cdef double scaling_factor = 0.75794464
+
+    wvl = wavel * 1e-4 / (1. + z)
+    if wvl <= 1000 * 1e-4:
+        for i in range(N):
+            sums = sums + params[0, i] / (pow(wvl / params[1,i], params[3,i]) +
+                                          pow(params[1,i] / wvl, params[3,i]) + params[2,i])
+        # Transform Alambda_over_Ab to Alambda_over_Av
+        Alambda_over_Av = (1. / Rv + 1.) * sums * scaling_factor
+    else:
+        Alambda_over_Av = (
+            -2.2113e-05 / pow(wvl, 8)
+            + 9.7507e-04 / pow(wvl, 7)
+            - 1.7447e-02 / pow(wvl, 6)
+            + 1.6186e-01 / pow(wvl, 5)
+            - 8.2474e-01 / pow(wvl, 4)
+            + 2.262 / pow(wvl, 3)
+            - 3.13 / pow(wvl, 2)
+            + 2.591 / wvl
+            - 6.5916e-01
+        )
+    # Assume nothing get absorbed below 700 angstroms as there is the IGM absorption
+    # and the analytical formula of Pei92 has a transmission starting increasing at wvl < 800ang
+    #if Xcut and wvl < 0.07:
+    #    # Applied a cut for wavelength below 700 angstrom
+    #    # Useful when coupling with Xray data
+    #    Alambda_over_Av = 0.
+
+    return Alambda_over_Av
+
+def sne(double[:] wavelength, double Av, double z,
+        bint Xcut=True, int num_threads=1):
+    """
+    Extinction laws from Pei 1992 article
+
+    Parameters
+    ----------
+    wavelength: `array` or `float`
+        wavlength in angstroms
+
+    Av: `float`
+        amount of extinction in the V band
+
+    z: `float`
+        redshift
+
+    Xcut: `boolean`, optional, default: False
+         Whether to set attenuation to 0 for wavelength below 700 angstrom
+         Useful when coupling with X-ray data
+
+    Returns
+    -------
+    Alambda_over_Av, Trans_dust
+
+    Alambda_over_Av : `array`
+        atteanuation as a function of wavelength normalise by Av
+        (attenuation in V band)
+
+    Trans_dust: `array`
+        transmission through dust as a function of wavelength
+
+    """
+    cdef Py_ssize_t i
+    cdef Py_ssize_t N = len(wavelength)
+    cdef double[:] Alambda_over_Av = np.zeros(N, dtype=np.float64)
+    cdef double[:] Trans_dust = np.zeros(N, dtype=np.float64)
+    cdef double[:,::1] params #= np.zeros((4,6), dtype=np.float64)
+
+    params = Pei92_params("smc")
+
+    for i in prange(N, nogil=True, num_threads=num_threads):
+        Alambda_over_Av[i] = sne_float(wavelength[i], z, params, Xcut)
+        Trans_dust[i] = get_trans(Alambda_over_Av[i], Av)
+
     return Alambda_over_Av, Trans_dust
 
 
